@@ -8,10 +8,11 @@ behind a grey veil. The user starts with a tiny island of visible streets—just
 leaving a bright trail through the places they have discovered.
 
 This repository contains a polished, self-contained demonstration of that
-idea. Press **Watch demo walk** and a simulated visitor walks from Hauptplatz
-to Mariendom along mapped pedestrian roads and walkways. The user marker moves,
-the veil recedes, the travelled path grows, and the percentage of Linz explored
-ticks upward in real time.
+idea. Choose a destination and a simulated visitor walks along mapped
+pedestrian roads and walkways. The first journey begins at Hauptplatz; every
+later journey begins exactly where the user marker currently stands. The user marker moves, the veil recedes,
+the travelled path grows, and the percentage of Linz explored ticks upward in
+real time.
 
 ## The experience
 
@@ -25,10 +26,14 @@ The interface deliberately keeps the world mysterious. Grey areas are not
 disabled map tiles; they are unexplored territory. Under the veil, the
 OpenStreetMap basemap is already present and waiting to be uncovered.
 
-### Demo journey
+### Demo journeys
 
-The built-in journey is an artificial location simulation. It requires no GPS
-permission and no live routing API.
+The journeys are artificial location simulations and require no GPS permission.
+The current choices are Mariendom, Landestheater Linz, and Linz Hauptbahnhof.
+Initial route geometry is bundled with the demo. When a new destination is
+chosen, the app asks the open Valhalla pedestrian router for a street-following
+route from the marker's current coordinates, so the user never jumps back to
+Hauptplatz.
 
 ```text
 Hauptplatz
@@ -92,7 +97,8 @@ database or spatial backend.
 
 | Control | Behaviour |
 | --- | --- |
-| **Watch demo walk** | Starts the artificial journey to Mariendom |
+| **Walk to…** | Starts the artificial journey to the selected destination |
+| **Choose destination** | Selects Mariendom, Landestheater, or Hauptbahnhof |
 | **Pause demo** | Freezes the simulated user at the current position |
 | **Continue demo** | Resumes from the paused position |
 | **Replay demo** | Starts the route again after arrival |
@@ -113,9 +119,9 @@ database or spatial backend.
 - **Vanilla HTML, CSS, and JavaScript** keep the demo portable and dependency
   free at build time.
 
-No access token, application server, database, or routing request is needed at
-runtime. An internet connection is still required for CesiumJS and map tiles,
-which are loaded from public CDNs.
+No access token, application server, or database is needed at runtime. An
+internet connection is required for CesiumJS, map tiles, and new pedestrian
+routes, which are loaded from public services.
 
 ## Run the project
 
@@ -142,9 +148,11 @@ resources.
 ```text
 .
 ├── src/
-│   └── linz-map.html       # Editable application source
+│   ├── linz-map.html       # Editable application source
+│   └── routes.js           # Embedded pedestrian route geometry
 ├── dist/
-│   └── index.html          # Generated, ready-to-serve demo
+│   ├── index.html          # Generated, ready-to-serve demo
+│   └── routes.js           # Generated route data
 ├── build_cesium_linz.py    # Copies source into dist
 └── README.md               # This guide
 ```
@@ -174,7 +182,8 @@ This is a presentation-ready proof of concept, not yet a production tracker.
 - Progress lasts for the current page session and is not persisted.
 - The city outline is simplified rather than an official municipal boundary.
 - GPS readings are accepted inside that outline without map-matching.
-- The embedded demo follows a fixed route and does not recalculate directions.
+- A newly selected destination is routed from the marker's current location;
+  this requires the public Valhalla service to be available.
 - External CDN and OpenStreetMap availability affect the basemap.
 
 A production version would use the official Linz boundary, persistent user
