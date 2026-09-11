@@ -26,6 +26,20 @@ The interface deliberately keeps the world mysterious. Grey areas are not
 disabled map tiles; they are unexplored territory. Under the veil, the
 OpenStreetMap basemap is already present and waiting to be uncovered.
 
+Amber points above the veil are upcoming event-location hints sourced from a
+small snapshot of the open Boudicca Events Search API. They give the player
+reasons to explore without revealing the streets beneath the fog. Past events
+are filtered out in the browser. The snapshot keeps the static demo reliable
+because the public Search service does not currently advertise browser CORS
+access.
+
+When the user comes within 100 metres of one of these hints, an event card
+appears with the event title and venue. Each discovery is shown once per page
+session and can be dismissed without interrupting the walk. Event points in an
+already revealed area can also be clicked to reopen their information. Where
+the source provides a URL, the card links to the original event page; points
+outside the revealed area remain anonymous hints.
+
 ### Demo journeys
 
 The journeys are artificial location simulations and require no GPS permission.
@@ -99,6 +113,7 @@ database or spatial backend.
 | --- | --- |
 | **Walk to…** | Starts the artificial journey to the selected destination |
 | **Choose destination** | Selects Mariendom, Landestheater, or Hauptbahnhof |
+| **Right-click map** | Pins any point inside Linz as a custom walking destination |
 | **Pause demo** | Freezes the simulated user at the current position |
 | **Continue demo** | Resumes from the paused position |
 | **Replay demo** | Starts the route again after arrival |
@@ -112,6 +127,8 @@ database or spatial backend.
 - **CesiumJS** renders the interactive map, user, destination, boundary, and
   growing trail.
 - **OpenStreetMap** supplies the open basemap tiles.
+- **Boudicca Events** supplies the Linz event-location hints shown above the
+  unexplored map.
 - **Linz-only clipping** limits the Cesium globe and basemap requests to the
   configured Linz bounding area.
 - **Canvas masking** creates the fog-of-exploration effect.
