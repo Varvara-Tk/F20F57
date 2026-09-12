@@ -68,24 +68,18 @@ compressed into roughly sixteen seconds.
 
 During the simulation:
 
-1. The camera frames the entire journey.
+1. The camera stays centred on the moving user.
 2. A bright user marker advances between consecutive route coordinates.
 3. A lime trail grows behind the marker.
 4. A softly feathered 100 m circle clears the grey mask.
-5. Distance, explored zones, area, and percentage update continuously.
+5. Distance, explored area, and percentage update continuously.
 6. Mariendom remains visible as the destination.
 
-The demo can be paused, continued, or replayed.
-
-### Real-location mode
-
-**Use my location** asks the browser for the device position. If the user is
-inside the Linz game boundary, their first 100 m area is revealed and subsequent
-GPS updates continue uncovering the city.
-
-Geolocation normally requires either `localhost` or an HTTPS deployment. If
-permission is declined or location is unavailable, the interface safely points
-the user back to the demo.
+The demo can be paused or continued. After reaching a destination, the user can
+choose another journey from their current position or finish the trip. The
+finish screen summarizes distance, area, exploration percentage, destinations,
+events, and named streets. Short place and street histories come from Linz
+Tourism, the destination operators, and the City of Linz street-name dataset.
 
 ## How the reveal works
 
@@ -116,8 +110,8 @@ database or spatial backend.
 | **Right-click map** | Pins any point inside Linz as a custom walking destination |
 | **Pause demo** | Freezes the simulated user at the current position |
 | **Continue demo** | Resumes from the paused position |
-| **Replay demo** | Starts the route again after arrival |
-| **Use my location** | Starts browser geolocation tracking |
+| **Walk somewhere again** | Opens destination choice after arrival |
+| **Finish trip** | Opens the trip summary after completing a route |
 | **City overview** | Frames the full Linz game area |
 | **Follow me** | Centres the map on the latest user position |
 | **+ / −** | Changes map zoom |
@@ -129,10 +123,11 @@ database or spatial backend.
 - **OpenStreetMap** supplies the open basemap tiles.
 - **Boudicca Events** supplies the Linz event-location hints shown above the
   unexplored map.
+- **City of Linz street-name data** supplies historical context for streets
+  recorded by the pedestrian router.
 - **Linz-only clipping** limits the Cesium globe and basemap requests to the
   configured Linz bounding area.
 - **Canvas masking** creates the fog-of-exploration effect.
-- **Browser Geolocation API** powers real-device movement.
 - **Vanilla HTML, CSS, and JavaScript** keep the demo portable and dependency
   free at build time.
 
@@ -198,7 +193,6 @@ This is a presentation-ready proof of concept, not yet a production tracker.
 
 - Progress lasts for the current page session and is not persisted.
 - The city outline is simplified rather than an official municipal boundary.
-- GPS readings are accepted inside that outline without map-matching.
 - A newly selected destination is routed from the marker's current location;
   this requires the public Valhalla service to be available.
 - External CDN and OpenStreetMap availability affect the basemap.
